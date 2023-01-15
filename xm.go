@@ -76,6 +76,9 @@ func getAccount(username, password string) (*Account, error) {
 	if err != nil {
 		return account, err
 	}
+	if res.StatusCode != 200 {
+		return account, errors.New(res.Status)
+	}
 	location, _ := res.Location()
 	access := location.Query().Get("access")
 	ezap.Debug("获取到登录 token: ", access)

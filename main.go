@@ -2,14 +2,13 @@ package main
 
 import (
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/fimreal/goutils/ezap"
 	"github.com/gin-gonic/gin"
 )
 
-var port = ":" + os.Getenv("PORT")
+var port = ":8080"
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
@@ -17,7 +16,11 @@ func main() {
 	r.POST("/run", run)
 	r.GET("/run", run)
 	ezap.Info("listening to ", port)
-	r.Run(port)
+	err := r.Run(port)
+	if err != nil {
+		ezap.Error("端口监听错误:", err)
+		return
+	}
 }
 
 func run(ctx *gin.Context) {
